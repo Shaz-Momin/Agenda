@@ -1,0 +1,23 @@
+
+.bigContainer {
+    background-color: cyan;
+    height: 100vh;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+
+.dashboardPanel, .calendarPanel {
+    padding: 2rem;
+    overflow-wrap: break-word;
+}
+
+.dashboardPanel {
+    background-color: var(--oxford-blue);
+    color: var(--azure);
+}
+
+.calendarPanel {
+    background-color: var(--azure);
+    color: var(--oxford-blue);
+}

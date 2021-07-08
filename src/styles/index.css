@@ -1,20 +1,25 @@
 :root {
     --oxford-blue: #101935;
     --powder-blue: #9AD4D6;
-    --azure: #F2FDFF;
+    --azure: #daf9ff;
     --lavender: #DBCBD8;
     --cyber-grape: #564787;
 }
 
-.cardHolder {
+
+body {
     background: rgb(16,25,53);
-    background: linear-gradient(125deg, rgba(16,25,53,1) 0%, rgba(86,71,135,1) 100%)
+    background: linear-gradient(125deg, rgba(16,25,53,1) 0%, rgba(86,71,135,1) 100%);
+    width: 100%;
 }
 
 .card {
     color: var(--oxford-blue);
     box-shadow: 0 0 5px 0;
+    margin: auto;
+    max-width: 400px;
 }
+
 
 .button {
     background-color: var(--cyber-grape)!important;

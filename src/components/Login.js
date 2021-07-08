@@ -4,35 +4,28 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useHistory } from 'react-router-dom'
 import '../styles/index.css'
 
-export default function Signup() {
+export default function Login() {
 
-    const nameRef = useRef()
     const emailRef = useRef()
     const passwordRef = useRef()
-    const passwordConfirmRef = useRef()
-    const { signup } = useAuth()
+    const { login } = useAuth()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
     const history = useHistory()
 
     function handleSubmit(e) {
         e.preventDefault()
-
-        // check if the password & passwordConfirm match
-        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-            return setError('Passwords do not match')
-        }
         
-        signUp()
+        logIn()
 
-        async function signUp() {
+        async function logIn() {
             try {
                 setError('')
                 setLoading(true)
-                await signup(emailRef.current.value, passwordRef.current.value, nameRef.current.value)              
+                await login(emailRef.current.value, passwordRef.current.value)
                 history.push('/')
             } catch {
-                setError('Failed to create an account')
+                setError('Failed to sign in')
             }
             setLoading(false)
         }
@@ -43,16 +36,12 @@ export default function Signup() {
         <>
             <Card className="card">
                 <Card.Body className="p-4">
-                    <h2 className="text-center mb-4">Sign Up</h2>
+                    <h2 className="text-center mb-4">Log In</h2>
                     { error && 
                         <div className="px-3">
                             <Alert variant="danger">{ error }</Alert>
                         </div>}
                     <Form className="p-3" onSubmit={ handleSubmit }>
-                        <Form.Group id="name">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control className="mb-2" type="text" ref={nameRef} required />
-                        </Form.Group>
                         <Form.Group id="email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control className="mb-2" type="email" ref={emailRef} required />
@@ -61,18 +50,19 @@ export default function Signup() {
                             <Form.Label>Password</Form.Label>
                             <Form.Control className="mb-2" type="password" ref={passwordRef} required />
                         </Form.Group>
-                        <Form.Group id="password-confirm">
-                            <Form.Label>Password Confirmation</Form.Label>
-                            <Form.Control className="mb-4" type="password" ref={passwordConfirmRef} required />
-                        </Form.Group>
                         <Button className="w-100 button mt-2" disable={loading} type="submit">
-                            Sign Up
+                            Log In
                         </Button>
                     </Form>
+                    <div className="w-100 mt-3 text-center">
+                        <Link style={{ textDecoration: 'none' }} to="/forgot-password">
+                            Forgot Password?
+                        </Link>
+                    </div>
                 </Card.Body>
             </Card>
             <div className="w-100 mt-4 text-center text-white">
-                Already have an account? <Link style={{ textDecoration: 'none' }} to="/login">Log In</Link>
+                Need an account? <Link style={{ textDecoration: 'none' }}  to="/signup">Sign Up</Link>
             </div>
         </>
     )
