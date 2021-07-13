@@ -11,6 +11,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
 
     const [currentUser, setCurrentUser] = useState()
+    const [currentUsername, setCurrentUsername] = useState()
     const [loading, setLoading] = useState(true)
     const db = firebase.firestore()
 
@@ -39,6 +40,9 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
+            db.collection('users').doc(user.uid).get().then(doc => {
+                setCurrentUsername(doc.data().name)
+            })
             /* db.collection('users').doc(user.uid).get().then(doc => {
                 console.log(doc.data().name);
             }) */
@@ -51,6 +55,7 @@ export function AuthProvider({ children }) {
 
     const value = {
         currentUser,
+        currentUsername,
         login,
         signup,
         logout,

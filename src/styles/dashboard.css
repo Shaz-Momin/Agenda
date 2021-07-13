@@ -20,4 +20,8 @@
 .calendarPanel {
     background-color: var(--azure);
     color: var(--oxford-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh!important;
 }
