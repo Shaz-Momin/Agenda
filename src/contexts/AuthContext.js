@@ -40,9 +40,11 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
-            db.collection('users').doc(user.uid).get().then(doc => {
-                setCurrentUsername(doc.data().name)
-            })
+            if (user != null) {
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    setCurrentUsername(doc.data().name)
+                })  
+            }
             /* db.collection('users').doc(user.uid).get().then(doc => {
                 console.log(doc.data().name);
             }) */

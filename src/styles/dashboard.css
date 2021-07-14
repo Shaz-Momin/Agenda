@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700;1,800;1,900&family=Oxygen:wght@300;400;700&display=swap');
 
 .bigContainer {
     background-color: cyan;
@@ -15,6 +17,7 @@
 .dashboardPanel {
     background-color: var(--oxford-blue);
     color: var(--azure);
+    height: 100%;
 }
 
 .calendarPanel {
@@ -24,4 +27,51 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100vh!important;
+}
+
+.eventsPanel {
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+.mainDate {
+    font-size: 7rem;
+    font-weight: bold;
+    font-family: 'Oxygen', sans-serif!important;
+}
+
+.mainMonth, .mainWeek, .eventsPanel {
+    font-family: 'Nunito', sans-serif!important;
+}
+
+.mainMonth {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.mainWeek {
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+
+.rounded {
+    border-top: 0.2rem solid var(--azure);
+    border-radius: 5px;
+}
+
+.dotted {
+    border-top: 0.2rem dashed var(--azure);
+    background-color: var(--oxford-blue);
+}
+
+.rounded, .dotted {
+    opacity: 0.6;
+    margin: 1rem 0 1rem 0;
+}
+
+.sectionTitle {
+    font-weight: 600!important;
+    font-style: italic;
+    font-size: 1.2rem;
+
 }
