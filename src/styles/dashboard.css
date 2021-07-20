@@ -32,10 +32,12 @@
 .eventsPanel {
     width: 100%;
     overflow-wrap: break-word;
+    font-family: 'Nunito', sans-serif!important;
 }
 
 .mainDate {
     font-size: 7rem;
+    line-height: 9rem;
     font-weight: bold;
     font-family: 'Oxygen', sans-serif!important;
 }
@@ -54,7 +56,7 @@
     font-weight: 100;
 }
 
-.rounded {
+.solid {
     border-top: 0.2rem solid var(--azure);
     border-radius: 5px;
 }
@@ -64,8 +66,8 @@
     background-color: var(--oxford-blue);
 }
 
-.rounded, .dotted {
-    opacity: 0.6;
+.line {
+    opacity: 0.7;
     margin: 1rem 0 1rem 0;
 }
 

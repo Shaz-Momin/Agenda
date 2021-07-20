@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import DateContext from '../contexts/DateContext'
 import '../styles/calendarPanel.css'
 
-export default function CalendarPanel() {
+export default function CalendarPanel({ closeModal }) {
     const [error, setError] = useState()
     const { currentUser, currentUsername, logout } = useAuth()
     const history = useHistory()
@@ -28,7 +28,7 @@ export default function CalendarPanel() {
                 <div className="currentTime">
                     {date.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric'})}
                 </div>
-                <Button className="addEventBtn">Add Event</Button>
+                <Button className="addEventBtn" onClick={() => {closeModal(true)}}>Add Event</Button>
             </div>
             <div className="calendarContainer w-100">
                 Calendar

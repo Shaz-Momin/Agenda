@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
+
 .cta-header, .calendarContainer, .cta-footer {
     padding: 1rem;
     align-items: center;
@@ -19,6 +21,9 @@
 
 .addEventBtn {
     background-color: var(--cyber-grape)!important;
+}
+
+.addEventBtn, .cancelBtn {
     border: none!important;
     letter-spacing: 0.15rem;
     font-weight: 600!important;
@@ -28,4 +33,9 @@
 
 .calendarContainer {
     height: 80%;
+}
+
+.startTime, .endTime {
+    display: flex;
+    justify-content: space-around;
 }

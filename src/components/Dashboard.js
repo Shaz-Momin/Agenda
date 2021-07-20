@@ -4,10 +4,12 @@ import CalendarPanel from './CalendarPanel'
 import EventsPanel from './EventsPanel'
 import DateContext from '../contexts/DateContext'
 import '../styles/dashboard.css'
+import CreateEventModal from './CreateEventModal'
 
 export default function Dashboard() {
 
     const [date, setDate] = useState(new Date())
+    const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {
         var timer = setInterval(() => {
@@ -27,14 +29,14 @@ export default function Dashboard() {
                         <div className="dateDocker">
                             <DateDocker />
                         </div>
-                        <hr class="rounded"/>
                         <div className="eventsPanel">
                             <EventsPanel />
                         </div>
                     </div>
                     <div className="calendarPanel">
-                        <CalendarPanel />
+                        <CalendarPanel closeModal={setOpenModal}/>
                     </div>
+                    {openModal && <CreateEventModal closeModal={setOpenModal}/>}
                 </div>
             </DateContext.Provider>
         </>

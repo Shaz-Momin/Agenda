@@ -9,8 +9,9 @@ export default function EventsPanel() {
 
     return (
         <>
+            <hr class="solid line"/>
             <div className="sectionTitle">Currently</div>
-            <hr class="dotted"/>
+            <hr class="dotted line"/>
             <div className="sectionTitle">Upcoming</div>
         </>
     )
