@@ -33,6 +33,8 @@ export default function CreateEventModal({ closeModal }) {
             setError("Please enter a valid timeslot")
             return 0
         }
+
+        closeModal(false) // Close modal after saving the event
         
         console.log({
             "Event Title": eventTitleRef.current.value,

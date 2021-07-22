@@ -39,3 +39,10 @@
     display: flex;
     justify-content: space-around;
 }
+
+.calendarHolder {
+    width: 85%;
+    border: 2px solid var(--oxford-blue);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
