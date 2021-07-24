@@ -5,11 +5,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { useHistory } from 'react-router-dom'
 import DateContext from '../contexts/DateContext'
 import '../styles/calendarPanel.css'
-import { ThemeIcon } from '@mantine/core'
 
 export default function CalendarPanel({ closeModal }) {
     const [error, setError] = useState()
-    const { currentUser, currentUsername, logout } = useAuth()
+    const { currentUsername, logout } = useAuth()
     const history = useHistory()
     const date = useContext(DateContext)
 
@@ -21,6 +20,20 @@ export default function CalendarPanel({ closeModal }) {
             history.push('/login')
         } catch {
             setError('Failed to log out')
+        }
+    }
+
+    // onClick & hover events for each day in the calendar
+    var days = document.getElementsByClassName('mantine-calendar-day')
+    for (var i = 0; i < days.length; i++) {
+        let element = days[i]
+        element.onclick = () => {
+            let monthYear = document.getElementsByClassName('mantine-calendar-label')[0].innerHTML
+            let d = new Date(element.innerHTML + " " + monthYear)
+            console.log(d.toUTCString())
+        }
+        element.onmouseover = () => {
+            element.title = element.innerHTML
         }
     }
 
@@ -40,13 +53,15 @@ export default function CalendarPanel({ closeModal }) {
                         size="lg"
                         fullWidth
                         dayClassName="eachDay"
+                        previousMonthLabel="arrow"
+                        nextMonthLabel="arrow"
+                        disableOutsideEvents
                         styles={{
                             day: {
                                 color: "var(--oxford-blue)",
                                 fontSize: "1.5rem",
                                 fontWeight: "600",
                                 fontFamily: "'Montserrat', sans-serif",
-                                /*margin: "0.5rem", */
                             },
                             weekday: {
                                 fontWeight: "bold",
@@ -76,10 +91,7 @@ export default function CalendarPanel({ closeModal }) {
             </div>
             <div className="cta-footer">
                 <Dropdown drop="up">
-                    <Dropdown.Toggle variant="info" id="dropdown-basic">
-                        {currentUsername + " "}
-                    </Dropdown.Toggle>
-
+                    <Dropdown.Toggle variant="info" id="dropdown-basic">Profile </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item href="#" onClick={handleLogout}>Log Out</Dropdown.Item>
                     </Dropdown.Menu>

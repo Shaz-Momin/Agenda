@@ -6,7 +6,6 @@ import '../styles/index.css'
 
 export default function Signup() {
 
-    const nameRef = useRef()
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
@@ -29,7 +28,7 @@ export default function Signup() {
             try {
                 setError('')
                 setLoading(true)
-                await signup(emailRef.current.value, passwordRef.current.value, nameRef.current.value)              
+                await signup(emailRef.current.value, passwordRef.current.value)              
                 history.push('/')
             } catch {
                 setError('Failed to create an account')
@@ -49,10 +48,6 @@ export default function Signup() {
                             <Alert variant="danger">{ error }</Alert>
                         </div>}
                     <Form className="p-3" onSubmit={ handleSubmit }>
-                        <Form.Group id="name">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control className="mb-2" type="text" ref={nameRef} required />
-                        </Form.Group>
                         <Form.Group id="email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control className="mb-2" type="email" ref={emailRef} required />

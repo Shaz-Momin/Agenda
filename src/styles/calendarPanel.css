@@ -46,3 +46,9 @@
     border-radius: 1rem;
     padding: 1.5rem;
 }
+
+[aria-label="arrow"] svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    stroke: var(--oxford-blue);
+}

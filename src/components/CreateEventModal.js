@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
+import { useAuth } from '../contexts/AuthContext'
 import '../styles/modal.css'
 
 export default function CreateEventModal({ closeModal }) {
@@ -10,6 +11,8 @@ export default function CreateEventModal({ closeModal }) {
     const endTimeRef = useRef()
 
     const [error, setError] = useState()
+    const { saveEvent } = useAuth()
+
 
     Date.prototype.inputStyleDate = function() {
         var s =  this.toISOString().substring(0, 10) + "T" + this.getHours() + ":"
@@ -34,14 +37,18 @@ export default function CreateEventModal({ closeModal }) {
             return 0
         }
 
-        closeModal(false) // Close modal after saving the event
+        // Create event data object
+        const eventObj = {
+            eventTitle: eventTitleRef.current.value,
+            eventDescription: eventDesRef.current.value,
+            startTime: startTimeRef.current.value,
+            endTime: endTimeRef.current.value
+        }
         
-        console.log({
-            "Event Title": eventTitleRef.current.value,
-            "Event Description": eventDesRef.current.value,
-            "Start Time": startTimeRef.current.value,
-            "End Time": endTimeRef.current.value
-        })
+        // Save the data in the database & locally
+        saveEvent(eventObj)
+
+        closeModal(false) // Close modal after saving the event
     }
 
     return (
