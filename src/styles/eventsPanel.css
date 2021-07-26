@@ -1,0 +1,46 @@
+.currentEvents, .upcomingEvents {
+    padding: 0.5rem 0rem;
+}
+
+.eventContainer {
+    flex-direction: row;
+    margin-bottom: 0.6rem;
+}
+
+.timestamps {
+    width: 20%;
+    margin: 0;
+}
+
+.event {
+    width: 80%;
+    margin: 0;
+    padding: 0.9rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 0.5rem;
+}
+
+.event .title {
+    font-weight: bold;
+    padding-bottom: 0.1rem;
+    letter-spacing: 0.03rem;
+    font-size: 1.25rem;
+}
+
+.event .description {
+    font-weight: 300;
+    font-size: 0.9rem;
+}
+
+.timestamps {
+    padding: 0.9rem 0rem;
+    justify-content: space-between;
+}
+
+.startTime, .endTime {
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.045rem;
+    padding: 0rem 0.3rem;
+}

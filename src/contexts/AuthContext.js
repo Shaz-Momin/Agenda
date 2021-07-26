@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import firebase from 'firebase/app'
 import { auth } from '../firebase'
+import { formatISO } from 'date-fns'
 
 const AuthContext = React.createContext()
 
@@ -36,6 +37,9 @@ export function AuthProvider({ children }) {
         return auth.sendPasswordResetEmail(email)
     }
 
+    // 
+
+    // Save the event data in the db 
     async function saveEvent(eventObj) {
         console.log("Saving event in firestore")
         const doc = await db.collection('users').doc(currentUser.uid).collection('events').add({
@@ -55,10 +59,11 @@ export function AuthProvider({ children }) {
         snapshot.forEach(doc => {
             var docStartDate = doc.data().startTime.split('T')[0]
             var docEndDate = doc.data().endTime.split('T')[0]
-            var current = new Date().toISOString().split('T')[0]
+            var date = new Date()
+            var current = formatISO(date, { representation: 'date' })
 
             // Save event data to localStorage if its taking place today
-            if (current == docStartDate || current == docEndDate || (current > docStartDate && current < docEndDate)) {
+            if (current == docStartDate || current == docEndDate || (formatISO(date) > doc.data().startTime && formatISO(date) < doc.data().endTime)) {
                 console.log('Getting events from db')
                 let eventArr = JSON.parse(localStorage.getItem('events'))
 

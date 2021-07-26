@@ -15,7 +15,7 @@
     font-weight: bold;
     font-style: italic;
     opacity: 80%;
-    font-size: 1.3rem;
+    font-size: 20px!important;
     letter-spacing: 0.1rem;
 }
 
@@ -29,6 +29,11 @@
     font-weight: 600!important;
     padding-left: 1.2rem!important;
     padding-right: 1.2rem!important;
+    font-size: 16px!important;
+}
+
+#dropdown-basic {
+    font-size: 16px!important;
 }
 
 .calendarContainer {
@@ -45,6 +50,8 @@
     border: 2px solid var(--oxford-blue);
     border-radius: 1rem;
     padding: 1.5rem;
+    max-height: 100%!important;
+    overflow: auto;
 }
 
 [aria-label="arrow"] svg {

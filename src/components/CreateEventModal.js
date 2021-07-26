@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
+import { formatISO } from 'date-fns'
 import '../styles/modal.css'
 
 export default function CreateEventModal({ closeModal }) {
@@ -14,11 +15,7 @@ export default function CreateEventModal({ closeModal }) {
     const { saveEvent } = useAuth()
 
 
-    Date.prototype.inputStyleDate = function() {
-        var s =  this.toISOString().substring(0, 10) + "T" + this.getHours() + ":"
-        s += this.getMinutes() < 10 ? "0" + this.getMinutes() : this.getMinutes()
-        return s
-    }
+    //console.log(formatISO(new Date()))
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -55,7 +52,7 @@ export default function CreateEventModal({ closeModal }) {
         <div className="modalBackground">
             <div className="modalContainer p-4">
                 <div className="title p-2 text-center">
-                    <h3><b>Add Event</b></h3>
+                    <div style={{fontWeight:"bold", fontSize:"1.5rem"}}>Add Event</div>
                 </div>
                 <div className="body d-flex flex-column align-items-center">
                     <div className="w-75 font-weight-bold">
@@ -79,7 +76,7 @@ export default function CreateEventModal({ closeModal }) {
                                 <label>Starts</label>
                             </div>
                             <input 
-                                defaultValue={new Date().inputStyleDate()}
+                                defaultValue={formatISO(new Date()).substr(0, 16)}
                                 className="mx-3"
                                 type="datetime-local"
                                 ref={startTimeRef}/>
@@ -89,7 +86,7 @@ export default function CreateEventModal({ closeModal }) {
                                 <label>Ends</label>
                             </div>
                             <input
-                                defaultValue={new Date().inputStyleDate()}
+                                defaultValue={formatISO(new Date()).substr(0, 16)}
                                 className="mx-3"
                                 type="datetime-local"
                                 ref={endTimeRef}/>
