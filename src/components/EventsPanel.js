@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { format } from 'date-fns'
 import EventContainer from './EventContainer'
 import DateContext from '../contexts/DateContext'
 import '../styles/dashboard.css'
@@ -8,92 +10,48 @@ import '../styles/eventsPanel.css'
 export default function EventsPanel() {
 
     const date = useContext(DateContext)
-    const [events, setEvents] = useState([])
+    const [pastEvents, setPastEvents] = useState([])
     const [currEvents, setCurrEvents] = useState([])
     const [upcomingEvents, setUpcomingEvents] = useState([])
 
-    function getTitle(eventId) {
-        var data = JSON.parse(localStorage.getItem(eventId))
-        if (data != null) {
-            return data.eventTitle
-        }
-        return "Sample Title"
-    }
+    const { localDb } = useAuth()
 
-    function getDes(eventId) {
-        var data = JSON.parse(localStorage.getItem(eventId))
-        if (data != null) {
-            return data.eventDescription
-        }
-        return "Sample Description"
-    }
-
-    function getStartTime(eventId) {
-        var data = localStorage.getItem(eventId)
-        if (data != null) {
-            var date = new Date(JSON.parse(data).startTime)
-            let clock = 'AM'
-            let hours = date.getHours()
-            if (hours >= 12) {
-                clock = 'PM'
-                if (hours > 12) {
-                    hours -= 12
-                }
+    function hasEvent(arr, key) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].key == key) {
+                return true
             }
-            let minutes = date.getMinutes() / 10 > 0 ? date.getMinutes() : "0" + date.getMinutes()
-            return hours + ":" + minutes + " " + clock
         }
-        // Default return
-        return "12:30 PM"
+        return false
     }
 
-    function getEndTime(eventId) {
-        var data = localStorage.getItem(eventId)
-        if (data != null) {
-            var date = new Date(JSON.parse(data).endTime)
-            let clock = 'AM'
-            let hours = date.getHours()
-            if (hours >= 12) {
-                clock = 'PM'
-                if (hours > 12) {
-                    hours -= 12
-                }
-            }
-            let minutes = date.getMinutes() / 10 > 0 ? date.getMinutes() : "0" + date.getMinutes()
-            return hours + ":" + minutes + " " + clock
-        }
-        // Default return
-        return "2:30 PM"
-    }
-
-    function isValidJSONString(str) {
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return true;
-    }
 
     useEffect(() => {
-        var keys = Object.keys(localStorage)
-        for (let i = 0; i < keys.length; i++) {
-            var key = keys[i]
-            var obj = localStorage.getItem(key)
-            if (isValidJSONString(obj)) {
-                var jsonObj = JSON.parse(obj)
-                var validObj = 'eventTitle' in jsonObj && 'eventDescription' in jsonObj && 'startTime' in jsonObj && 'endTime' in jsonObj
-                if (validObj && !events.includes(key)) {
-                    setEvents(arr => [...arr, key])
+        localDb.collection('events').get({keys: true}).then(docs => {
+            for (var i = 0; i < docs.length; i++) {
+                let event = docs[i]
+                if (!currEvents.includes(event.key) && !upcomingEvents.includes(event.key) && !pastEvents.includes(event.key)) {
+                    //setEvents(arr => [...arr, event.key])
+                    // Allocating events to either current or upcoming categories        
+                    var currentlyHappening = date > new Date(event.data.startTime) && date < new Date(event.data.endTime) 
+                    if (currentlyHappening && !hasEvent(currEvents, event.key)) {
+                        // events.splice(j, 1)
+                        setCurrEvents(arr => [...arr, event])
+                    } else if (new Date(event.data.startTime) > date && !hasEvent(upcomingEvents, event.key)) {
+                        setUpcomingEvents(arr => [...arr, event])
+                    } else if (new Date(event.data.startTime) < date && !hasEvent(pastEvents, event.key)) {
+                        setPastEvents(arr => [...arr, event])
+                    }
                 }
             }
-        }
-        // console.log("events: " + events)
+        })
+
+        // console.log("currEvents: " + currEvents)
     }, [date.getSeconds()])
 
     useEffect(() => {
         // Allocating events to either current or upcoming categories        
-        for (let j = 0; j < events.length; j++) {
+        /* for (let j = 0; j < events.length; j++) {
             var event = JSON.parse(localStorage.getItem(events[j]))
             if (event != null) {
                 var currentlyHappening = date > new Date(event.startTime) && date < new Date(event.endTime) 
@@ -104,10 +62,10 @@ export default function EventsPanel() {
                     setUpcomingEvents(arr => [...arr, events[j]])
                 }
             }
-        }
+        } */
         // console.log("current: " + currEvents)
         // console.log("upcoming: " + upcomingEvents)
-    }, [date.getSeconds()])
+    }, [])
 
 
     
@@ -117,13 +75,13 @@ export default function EventsPanel() {
             <div>
                 <div className="sectionTitle">Currently</div>
                 <div className="currentEvents">
-                    {currEvents.map((eventId) =>
+                    {currEvents.map((event) =>
                         <EventContainer
                             current={true}
-                            title={getTitle(eventId)}
-                            desc={getDes(eventId)}
-                            start={getStartTime(eventId)}
-                            end={getEndTime(eventId)}
+                            title={event.data.eventTitle}
+                            desc={event.data.eventDescription}
+                            start={format(new Date(event.data.startTime), 'h:mm a')}
+                            end={format(new Date(event.data.endTime), 'h:mm a')}
                         />
                     )}
                 </div>
@@ -132,13 +90,13 @@ export default function EventsPanel() {
             <div>
                 <div className="sectionTitle">Upcoming</div>
                 <div className="upcomingEvents">
-                    {upcomingEvents.map((eventId) =>
+                    {upcomingEvents.map((event) =>
                         <EventContainer
                             current={false}
-                            title={getTitle(eventId)}
-                            desc={getDes(eventId)}
-                            start={getStartTime(eventId)}
-                            end={getEndTime(eventId)}
+                            title={event.data.eventTitle}
+                            desc={event.data.eventDescription}
+                            start={format(new Date(event.data.startTime), 'h:mm a')}
+                            end={format(new Date(event.data.endTime), 'h:mm a')}
                         />
                     )}
                 </div>

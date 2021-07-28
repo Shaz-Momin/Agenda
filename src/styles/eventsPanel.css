@@ -39,8 +39,10 @@
 }
 
 .startTime, .endTime {
+    text-align: center;
     font-size: 0.9rem;
     font-weight: 300;
-    letter-spacing: 0.045rem;
+    letter-spacing: 0.04rem;
     padding: 0rem 0.3rem;
+    line-height: 1rem;
 }
