@@ -1,6 +1,9 @@
 .modalBackground {
+    z-index: 2;
     width: 100vw;
     height: 100vh;
+    top: 0;
+    left: 0;
     position: fixed;
     display: flex;
     justify-content: center;

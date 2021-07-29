@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { format } from 'date-fns'
 import EventContainer from './EventContainer'
 import DateContext from '../contexts/DateContext'
+import UpdateEventModal from './UpdateEventModal'
 import '../styles/dashboard.css'
 import '../styles/eventsPanel.css'
 
@@ -10,6 +11,8 @@ import '../styles/eventsPanel.css'
 export default function EventsPanel() {
 
     const date = useContext(DateContext)
+    const [openUpdateModal, setOpenUpdateModal] = useState(false)
+    const [selectedEvent, setSelectedEvent] = useState({})
     const [pastEvents, setPastEvents] = useState([])
     const [currEvents, setCurrEvents] = useState([])
     const [upcomingEvents, setUpcomingEvents] = useState([])
@@ -67,11 +70,6 @@ export default function EventsPanel() {
         sortByStartTime(currEvents)
         sortByStartTime(upcomingEvents)
 
-        for (var i = 0; i < upcomingEvents.length; i++) {
-            // console.log(new Date(upcomingEvents[i].data.startTime))
-        }
-        //console.log("------")
-
     }, [date.getSeconds()])
 
     
@@ -84,10 +82,13 @@ export default function EventsPanel() {
                     {currEvents.map((event) =>
                         <EventContainer
                             current={true}
+                            event={event}
                             title={event.data.eventTitle}
                             desc={event.data.eventDescription}
                             start={format(new Date(event.data.startTime), 'h:mm a')}
                             end={format(new Date(event.data.endTime), 'h:mm a')}
+                            closeUpdateModal={setOpenUpdateModal}
+                            setSelectedEvent={setSelectedEvent}
                         />
                     )}
                 </div>
@@ -99,14 +100,18 @@ export default function EventsPanel() {
                     {upcomingEvents.map((event) =>
                         <EventContainer
                             current={false}
+                            event={event}
                             title={event.data.eventTitle}
                             desc={event.data.eventDescription}
                             start={format(new Date(event.data.startTime), 'h:mm a')}
                             end={format(new Date(event.data.endTime), 'h:mm a')}
+                            closeUpdateModal={setOpenUpdateModal}
+                            setSelectedEvent={setSelectedEvent}
                         />
                     )}
                 </div>
             </div>
+            {openUpdateModal && <UpdateEventModal closeModal={setOpenUpdateModal} selectedEvent={selectedEvent}/>}
         </>
     )
 }

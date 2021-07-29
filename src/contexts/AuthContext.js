@@ -42,8 +42,6 @@ export function AuthProvider({ children }) {
         return auth.sendPasswordResetEmail(email)
     }
 
-    // 
-
     // Save the event data in the db 
     async function saveEvent(eventObj) {
         console.log("Saving event in firestore")
@@ -57,6 +55,26 @@ export function AuthProvider({ children }) {
         // Saving the data locally in indexDb
         // localStorage.setItem(doc.id, JSON.stringify(eventObj))
         localDb.collection('events').doc(doc.id).set(eventObj)
+    }
+
+    // Update the event data in the db
+    async function updateEvent(eventObj, docId) {
+        console.log("Updating event in firestore")
+        const doc = await db.collection('users').doc(currentUser.uid).collection('events').doc(docId).update({
+            eventTitle: eventObj.eventTitle,
+            eventDescription: eventObj.eventDescription,
+            startTime: eventObj.startTime,
+            endTime: eventObj.endTime
+        })
+        
+        // Updating the data locally in indexDb
+        localDb.collection('events').doc(docId).update(eventObj)
+    }
+
+    // Delete the user's event in the db
+    async function deleteEvent(docId) {
+        await db.collection('users').doc(currentUser.uid).collection('events').doc(docId).delete()
+        localDb.collection('events').doc(docId).delete()
     }
 
     // Gets the user's event data from the db
@@ -101,7 +119,9 @@ export function AuthProvider({ children }) {
         signup,
         logout,
         resetPassword,
-        saveEvent
+        saveEvent,
+        updateEvent,
+        deleteEvent
     }
 
     return (

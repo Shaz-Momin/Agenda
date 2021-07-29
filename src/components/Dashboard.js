@@ -9,7 +9,7 @@ import CreateEventModal from './CreateEventModal'
 export default function Dashboard() {
 
     const [date, setDate] = useState(new Date())
-    const [openModal, setOpenModal] = useState(false)
+    const [openAddModal, setOpenAddModal] = useState(false)
 
     useEffect(() => {
         var timer = setInterval(() => {
@@ -34,9 +34,9 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="calendarPanel">
-                        <CalendarPanel closeModal={setOpenModal}/>
+                        <CalendarPanel closeModal={setOpenAddModal}/>
                     </div>
-                    {openModal && <CreateEventModal closeModal={setOpenModal}/>}
+                    {openAddModal && <CreateEventModal closeModal={setOpenAddModal}/>}
                 </div>
             </DateContext.Provider>
         </>
