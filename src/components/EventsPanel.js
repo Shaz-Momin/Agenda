@@ -25,6 +25,22 @@ export default function EventsPanel() {
         return false
     }
 
+    function removeFromArr(arr, key) {
+        var i = 0;
+        while (i < arr.length && arr[i].key != key) {
+            i++
+        }
+        if (i < arr.length) {
+            arr.splice(i, 1)
+        }
+    }
+
+    function sortByStartTime(arr) {
+        arr.sort((a, b) => {
+            return new Date(a.data.startTime) - new Date(b.data.startTime)
+        })
+    }
+
 
     useEffect(() => {
         localDb.collection('events').get({keys: true}).then(docs => {
@@ -33,40 +49,30 @@ export default function EventsPanel() {
                 if (!currEvents.includes(event.key) && !upcomingEvents.includes(event.key) && !pastEvents.includes(event.key)) {
                     //setEvents(arr => [...arr, event.key])
                     // Allocating events to either current or upcoming categories        
-                    var currentlyHappening = date > new Date(event.data.startTime) && date < new Date(event.data.endTime) 
+                    var currentlyHappening = date > new Date(event.data.startTime) && date < new Date(event.data.endTime)
                     if (currentlyHappening && !hasEvent(currEvents, event.key)) {
                         // events.splice(j, 1)
+                        removeFromArr(upcomingEvents, event.key)
                         setCurrEvents(arr => [...arr, event])
                     } else if (new Date(event.data.startTime) > date && !hasEvent(upcomingEvents, event.key)) {
                         setUpcomingEvents(arr => [...arr, event])
-                    } else if (new Date(event.data.startTime) < date && !hasEvent(pastEvents, event.key)) {
+                    } else if (new Date(event.data.endTime) < date && !hasEvent(pastEvents, event.key)) {
+                        removeFromArr(currEvents, event.key)
                         setPastEvents(arr => [...arr, event])
                     }
                 }
             }
         })
 
-        // console.log("currEvents: " + currEvents)
+        sortByStartTime(currEvents)
+        sortByStartTime(upcomingEvents)
+
+        for (var i = 0; i < upcomingEvents.length; i++) {
+            // console.log(new Date(upcomingEvents[i].data.startTime))
+        }
+        //console.log("------")
+
     }, [date.getSeconds()])
-
-    useEffect(() => {
-        // Allocating events to either current or upcoming categories        
-        /* for (let j = 0; j < events.length; j++) {
-            var event = JSON.parse(localStorage.getItem(events[j]))
-            if (event != null) {
-                var currentlyHappening = date > new Date(event.startTime) && date < new Date(event.endTime) 
-                if (currentlyHappening && !currEvents.includes(events[j])) {
-                    // events.splice(j, 1)
-                    setCurrEvents(arr => [...arr, events[j]])
-                } else if (new Date(event.startTime) > date && !upcomingEvents.includes(events[j])) {
-                    setUpcomingEvents(arr => [...arr, events[j]])
-                }
-            }
-        } */
-        // console.log("current: " + currEvents)
-        // console.log("upcoming: " + upcomingEvents)
-    }, [])
-
 
     
     return (

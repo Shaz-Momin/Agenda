@@ -18,6 +18,7 @@
     background-color: var(--oxford-blue);
     color: var(--azure);
     height: 100%;
+    max-height: 100vh;
 }
 
 .calendarPanel {
@@ -33,6 +34,11 @@
     width: 100%;
     overflow-wrap: break-word;
     font-family: 'Nunito', sans-serif!important;
+    overflow-y: auto;
+}
+
+.eventsPanel::-webkit-scrollbar {
+    display:none;
 }
 
 .mainDate {
