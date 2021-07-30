@@ -5,6 +5,7 @@ import EventsPanel from './EventsPanel'
 import DateContext from '../contexts/DateContext'
 import '../styles/dashboard.css'
 import CreateEventModal from './CreateEventModal'
+import { EventProvider } from '../contexts/EventContext'
 
 export default function Dashboard() {
 
@@ -24,20 +25,22 @@ export default function Dashboard() {
     return (
         <> 
             <DateContext.Provider value={date}>
-                <div className="bigContainer">
-                    <div className="dashboardPanel d-flex flex-column">
-                        <div className="dateDocker">
-                            <DateDocker />
+                <EventProvider>
+                    <div className="bigContainer">
+                        <div className="dashboardPanel d-flex flex-column">
+                            <div className="dateDocker">
+                                <DateDocker />
+                            </div>
+                            <div className="eventsPanel">
+                                <EventsPanel />
+                            </div>
                         </div>
-                        <div className="eventsPanel">
-                            <EventsPanel />
+                        <div className="calendarPanel">
+                            <CalendarPanel closeModal={setOpenAddModal}/>
                         </div>
+                        {openAddModal && <CreateEventModal closeModal={setOpenAddModal}/>}
                     </div>
-                    <div className="calendarPanel">
-                        <CalendarPanel closeModal={setOpenAddModal}/>
-                    </div>
-                    {openAddModal && <CreateEventModal closeModal={setOpenAddModal}/>}
-                </div>
+                </EventProvider>
             </DateContext.Provider>
         </>
     )

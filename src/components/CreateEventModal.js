@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
-import { useAuth } from '../contexts/AuthContext'
+import { useEventContext } from '../contexts/EventContext'
 import { formatISO } from 'date-fns'
 import '../styles/modal.css'
 
@@ -12,7 +12,7 @@ export default function CreateEventModal({ closeModal }) {
     const endTimeRef = useRef()
 
     const [error, setError] = useState()
-    const { saveEvent } = useAuth()
+    const { saveEvent } = useEventContext()
 
 
     //console.log(formatISO(new Date()))

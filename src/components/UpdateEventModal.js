@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
-import { useAuth } from '../contexts/AuthContext'
+import { useEventContext } from '../contexts/EventContext'
 import { formatISO } from 'date-fns'
 import '../styles/modal.css'
 
@@ -12,7 +12,7 @@ export default function UpdateEventModal({ closeModal, selectedEvent }) {
     const endTimeRef = useRef()
 
     const [error, setError] = useState()
-    const { updateEvent, deleteEvent } = useAuth()
+    const { updateEvent, deleteEvent } = useEventContext()
 
     //console.log(formatISO(new Date()))
 
@@ -31,6 +31,16 @@ export default function UpdateEventModal({ closeModal, selectedEvent }) {
             || Date.parse(endTimeRef.current.value) < new Date()) {
             setError("Please enter a valid timeslot")
             return 0
+        }
+
+        // Check if the event data values are unchanged
+        if (eventTitleRef.current.value == selectedEvent.data.eventTitle && 
+            eventDesRef.current.value == selectedEvent.data.eventDescription &&
+            startTimeRef.current.value == selectedEvent.data.startTime && 
+            endTimeRef.current.value == selectedEvent.data.endTime) {
+            // console.log("No event data changes made")
+            closeModal(false)
+            return
         }
 
         // Create event data object
