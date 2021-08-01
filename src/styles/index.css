@@ -21,17 +21,43 @@
 		font-size: 12px;
 	}
 
-    .calendarHolder {
-        width: 100%!important;
-    }
+    
 }
 
 @media (max-width: 750px) {
 
-    /* Stack events panel & calendar panel */
+    /* Stack events panel & calendar panel for mobile screens*/
 	* {
-		font-size: 10px;
+		font-size: 12px;
 	}
+
+    .bigContainer {
+        display: grid;
+        grid-template-columns: auto!important;
+        height: 100vh;
+    }
+
+    .dashboardPanel {
+        width: 100%;
+        display: flex!important;
+
+    }
+
+    .calendarPanel {
+        width: 100%;
+        display: flex!important;
+    }
+
+    .calendarPanel .currentTime {
+        display: none!important;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .calendarHolder {
+        width: 100%!important;
+    }
 }
 
 

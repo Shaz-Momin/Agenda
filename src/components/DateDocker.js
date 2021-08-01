@@ -11,7 +11,7 @@ export default function DateDocker() {
 
     const weekNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
         'Saturday']
-
+    
 
     return (
         <>

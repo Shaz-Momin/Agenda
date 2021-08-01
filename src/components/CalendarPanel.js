@@ -30,6 +30,7 @@ export default function CalendarPanel({ closeModal }) {
         element.onclick = () => {
             let monthYear = document.getElementsByClassName('mantine-calendar-label')[0].innerHTML
             let d = new Date(element.innerHTML + " " + monthYear)
+            
             console.log(d.toUTCString())
         }
         element.onmouseover = () => {

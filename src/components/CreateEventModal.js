@@ -97,7 +97,7 @@ export default function CreateEventModal({ closeModal }) {
                 <div className="text-danger text-center w-100 mb-3">
                     <div style={{fontWeight: 500}}>* {error} *</div>
                 </div>}
-                <div className="footer p-2 px-4 d-flex justify-content-between">
+                <div className="footer p-2 px-4 d-flex flex-wrap justify-content-between">
                     <Button className="cancelBtn" onClick={() => {closeModal(false)}} variant="danger">Cancel</Button>
                     <Button className="addEventBtn" onClick={ handleSubmit }>Add Event</Button>
                 </div>

@@ -118,7 +118,7 @@ export default function UpdateEventModal({ closeModal, selectedEvent }) {
                 </div>}
                 <div className="footer p-2 px-4 d-flex justify-content-between">
                     <Button className="cancelBtn" onClick={() => {closeModal(false)}} variant="danger">Cancel</Button>
-                    <Button className="cancelBtn" onClick={removeEvent} variant="danger">Delete</Button>
+                    <Button className="cancelBtn mx-3" onClick={removeEvent} variant="danger">Delete</Button>
                     <Button className="addEventBtn" onClick={ handleSubmit }>Save Changes</Button>
                 </div>
             </div>

@@ -33,6 +33,9 @@ export function EventProvider({ children }) {
 
     // Update the event data in the db
     async function updateEvent(eventObj, docId) {
+        // Updating the data in the events array (state)
+        updateEventsArr(eventObj, docId)
+
         console.log("Updating event in firestore")
         const doc = await db.collection('users').doc(currentUser.uid).collection('events').doc(docId).update({
             eventTitle: eventObj.eventTitle,
@@ -43,12 +46,9 @@ export function EventProvider({ children }) {
         
         // Updating the data locally in indexDb
         localDb.collection('events').doc(docId).update(eventObj)
-
-        // Updating the data in the events array
-        updateEventsArr(eventObj, docId)
     }
 
-    // Updating the data in the events array
+    // Updating the data in the events array (state)
     function updateEventsArr(eventObj, docId) {
         for (var i = 0; i < currEvents.length; i++) {
             if (currEvents[i].key == docId) {
