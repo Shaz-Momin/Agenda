@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap'
 import { useEventContext } from '../contexts/EventContext'
 import { formatISO } from 'date-fns'
 import '../styles/modal.css'
+import { Checkbox } from '@mantine/core'
 
 export default function CreateEventModal({ closeModal }) {
 
@@ -11,11 +12,13 @@ export default function CreateEventModal({ closeModal }) {
     const startTimeRef = useRef()
     const endTimeRef = useRef()
 
+    const dateRef = useRef() // for all-day events
+
     const [error, setError] = useState()
+    const [allDay, setAllDay] = useState(false)
     const { saveEvent } = useEventContext()
 
-
-    //console.log(formatISO(new Date()))
+    //console.log(formatISO(new Date("2020-08-04T00:00")))
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -28,20 +31,21 @@ export default function CreateEventModal({ closeModal }) {
         }
 
         // Event Validation: startTime >= endTime or endTime > currentTime
-        if (Date.parse(startTimeRef.current.value) >= Date.parse(endTimeRef.current.value)
-            || Date.parse(endTimeRef.current.value) < new Date()) {
+        if (!allDay && (Date.parse(startTimeRef.current.value) >= Date.parse(endTimeRef.current.value)
+            || Date.parse(endTimeRef.current.value) < new Date())) {
             setError("Please enter a valid timeslot")
             return 0
         }
 
         // Create event data object
+        // While checking whether the user has selected the "all-day" checkbox
         const eventObj = {
             eventTitle: eventTitleRef.current.value,
             eventDescription: eventDesRef.current.value,
-            startTime: startTimeRef.current.value,
-            endTime: endTimeRef.current.value
+            startTime: !allDay ? startTimeRef.current.value : formatISO(new Date(dateRef.current.value + "T00:00")).substr(0, 16),
+            endTime: !allDay ? endTimeRef.current.value : formatISO(new Date(dateRef.current.value + "T24:00")).substr(0, 16)
         }
-        
+
         // Save the data in the database & locally
         saveEvent(eventObj)
 
@@ -71,26 +75,48 @@ export default function CreateEventModal({ closeModal }) {
                             ref={eventDesRef}/>
                     </div>
                     <div className="w-100 mt-3 d-flex flex-column align-items-center timeInputs">
+                        <div className="d-flex checkboxHolder mb-4">
+                            <Checkbox
+                                label="All-day"
+                                checked={allDay}
+                                onChange={(event) => setAllDay(event.currentTarget.checked)}
+                                color="indigo"
+                                size="md"/>
+                        </div>
+                        { !allDay && 
+                        <div>
+                            <div className="d-flex startTime mb-3">
+                                <div className="justify-content-center m-auto">
+                                    <label>Starts</label>
+                                </div>
+                                <input 
+                                    defaultValue={formatISO(new Date()).substr(0, 16)}
+                                    className="mx-3"
+                                    type="datetime-local"
+                                    ref={startTimeRef}/>
+                            </div>
+                            <div className="d-flex endTime">
+                                <div className="justify-content-center m-auto">
+                                    <label>Ends</label>
+                                </div>
+                                <input
+                                    defaultValue={formatISO(new Date()).substr(0, 16)}
+                                    className="mx-3"
+                                    type="datetime-local"
+                                    ref={endTimeRef}/>
+                            </div>
+                        </div>}
+                        {allDay && 
                         <div className="d-flex startTime mb-3">
                             <div className="justify-content-center m-auto">
-                                <label>Starts</label>
-                            </div>
-                            <input 
-                                defaultValue={formatISO(new Date()).substr(0, 16)}
-                                className="mx-3"
-                                type="datetime-local"
-                                ref={startTimeRef}/>
-                        </div>
-                        <div className="d-flex endTime">
-                            <div className="justify-content-center m-auto">
-                                <label>Ends</label>
+                                <label>Date</label>
                             </div>
                             <input
-                                defaultValue={formatISO(new Date()).substr(0, 16)}
+                                defaultValue={formatISO(new Date()).substr(0, 10)}
                                 className="mx-3"
-                                type="datetime-local"
-                                ref={endTimeRef}/>
-                        </div>
+                                type="date"
+                                ref={dateRef}/>
+                        </div>}
                     </div>
                 </div>
                 {error != null &&

@@ -8,11 +8,6 @@
     min-height: 4.3rem;
 }
 
-.timestamps {
-    width: 20%;
-    margin: 0;
-}
-
 .event {
     width: 80%;
     margin: 0;
@@ -39,9 +34,18 @@
     font-size: 0.9rem;
 }
 
-.timestamps {
+.timestamps, .single-timestamp {
     padding: 0.9rem 0rem;
+    width: 20%;
+    margin: 0;
+}
+
+.timestamps {
     justify-content: space-between;
+}
+
+.single-timestamp {
+    justify-content: space-around;
 }
 
 .startTime, .endTime {

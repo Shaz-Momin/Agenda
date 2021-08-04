@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 
-export default function EventContainer({current, event, start, end, title, desc, closeUpdateModal, setSelectedEvent}) {
+export default function EventContainer({current, event, closeUpdateModal, setSelectedEvent}) {
+
     return (
         <div className="eventContainer d-flex text-white">
-            <div className="timestamps d-flex flex-column">
-                <div className="startTime">{format(new Date(event.data.startTime), 'h:mm a')}</div>
-                <div className="endTime">{format(new Date(event.data.endTime), 'h:mm a')}</div>
-            </div>
+            {format(new Date(event.data.startTime), 'h:mm a') == format(new Date(event.data.endTime), 'h:mm a') ?
+                <div className="single-timestamp d-flex flex-column">   
+                    <div className="startTime">All-day</div>
+                </div> : 
+                <div className="timestamps d-flex flex-column">
+                    <div className="startTime">{format(new Date(event.data.startTime), 'h:mm a')}</div>
+                    <div className="endTime">{format(new Date(event.data.endTime), 'h:mm a')}</div>
+                </div>
+            }
             <div className="event"  style={{
                 backgroundColor: current ? "var(--powder-blue)" : "rgba(255, 255, 255, 0.1)",
                 color: current ? "var(--cyber-grape)" : "white"
