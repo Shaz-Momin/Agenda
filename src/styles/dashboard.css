@@ -87,6 +87,7 @@
 
 #toggleCal {
     display: flex;
+    cursor: default;
     justify-content: center;
     align-items: center;
     position: absolute;

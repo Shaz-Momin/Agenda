@@ -42,24 +42,38 @@ export default function EventsPanel() {
         })
     }
 
+    function addToArrayInOrder(arr, newEvent) {
+        let added = false
+        for (var i = 0; i < arr.length; i++) {
+            const event = arr[i]
+            if (newEvent.data.startTime < event.data.startTime) {
+                arr.splice(i, 0, newEvent)
+                added = true
+            }
+        }
+        if (!added) {
+            arr.push(newEvent)
+        }
+        return arr
+    }
+
     useEffect(() => {
         localDb.collection('events').get({keys: true}).then(docs => {
             for (var i = 0; i < docs.length; i++) {
                 let event = docs[i]
-                if (!currEvents.includes(event.key) && !upcomingEvents.includes(event.key) && !pastEvents.includes(event.key)) {
-                    //setEvents(arr => [...arr, event.key])
-                    // Allocating events to either current or upcoming categories        
-                    var currentlyHappening = date > new Date(event.data.startTime) && date < new Date(event.data.endTime)
-                    if (currentlyHappening && !hasEvent(currEvents, event.key)) {
-                        // events.splice(j, 1)
-                        removeFromArr(upcomingEvents, event.key)
-                        setCurrEvents(arr => [...arr, event])
-                    } else if (new Date(event.data.startTime) > date && !hasEvent(upcomingEvents, event.key)) {
-                        setUpcomingEvents(arr => [...arr, event])
-                    } else if (new Date(event.data.endTime) < date && !hasEvent(pastEvents, event.key)) {
-                        removeFromArr(currEvents, event.key)
-                        setPastEvents(arr => [...arr, event])
-                    }
+                //setEvents(arr => [...arr, event.key])
+                // Allocating events to either current or upcoming categories        
+                var currentlyHappening = date > new Date(event.data.startTime) && date < new Date(event.data.endTime)
+                if (currentlyHappening && !hasEvent(currEvents, event.key)) {
+                    // events.splice(j, 1)
+                    removeFromArr(upcomingEvents, event.key)
+                    setCurrEvents(arr => [...arr, event])
+                } else if (new Date(event.data.startTime) > date && !hasEvent(upcomingEvents, event.key)) {
+                    removeFromArr(currEvents, event.key)
+                    setUpcomingEvents(arr => [...arr, event])
+                } else if (new Date(event.data.endTime) < date && !hasEvent(pastEvents, event.key)) {
+                    removeFromArr(currEvents, event.key)
+                    setPastEvents(arr => [...arr, event])
                 }
             }
         })

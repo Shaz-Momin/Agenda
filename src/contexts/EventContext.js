@@ -52,19 +52,13 @@ export function EventProvider({ children }) {
     function updateEventsArr(eventObj, docId) {
         for (var i = 0; i < currEvents.length; i++) {
             if (currEvents[i].key == docId) {
-                currEvents[i].data.eventTitle = eventObj.eventTitle
-                currEvents[i].data.eventDescription = eventObj.eventDescription
-                currEvents[i].data.startTime = eventObj.startTime
-                currEvents[i].data.endTime = eventObj.endTime
+                currEvents[i].data = eventObj
                 return
             }
         }
         for (var i = 0; i < upcomingEvents.length; i++) {
             if (upcomingEvents[i].key == docId) {
-                upcomingEvents[i].data.eventTitle = eventObj.eventTitle
-                upcomingEvents[i].data.eventDescription = eventObj.eventDescription
-                upcomingEvents[i].data.startTime = eventObj.startTime
-                upcomingEvents[i].data.endTime = eventObj.endTime
+                upcomingEvents[i].data = eventObj
                 return
             }
         }
@@ -76,17 +70,17 @@ export function EventProvider({ children }) {
         localDb.collection('events').doc(docId).delete()
         
         // Deleting that event from the events array state
-        for (var i = 0; i < currEvents.length; i++) {
-            if (currEvents[i].key == docId) {
-                currEvents.splice(i, 1)
-                return
-            }
+        if (spliceFromArr(upcomingEvents, docId)) {
+            return
         }
+        spliceFromArr(currEvents, docId)
 
-        for (var i = 0; i < upcomingEvents.length; i++) {
-            if (upcomingEvents[i].key == docId) {
-                upcomingEvents.splice(i, 1)
-                return
+        function spliceFromArr(arr, docId) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].key == docId) {
+                    arr.splice(i, 1)
+                    return true
+                }
             }
         }
     }
