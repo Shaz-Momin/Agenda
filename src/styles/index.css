@@ -65,6 +65,7 @@
 body {
     background: rgb(86,71,135);
     background: radial-gradient(circle, rgba(86,71,135,1) 0%, rgba(16,25,53,1) 100%);
+    overflow-y: hidden;
 }
 
 .card {

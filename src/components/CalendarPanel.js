@@ -4,12 +4,20 @@ import { Button, Dropdown } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { useHistory } from 'react-router-dom'
 import { useDateContext } from '../contexts/DateContext'
+import { isSameDay } from 'date-fns'
 import '../styles/calendarPanel.css'
+import '../styles/datePopover.css'
 
 
 export default function CalendarPanel({ closeModal }) {
-    const [error, setError] = useState()
+
+    const [XY, setXY] = useState({})
+    const [lastSelected, setLastSelected] = useState()
     const [opened, setOpened] = useState(false)
+    const [currSelected, setCurrSelected] = useState()
+
+
+    const [error, setError] = useState()
     const { logout } = useAuth()
     const history = useHistory()
 
@@ -27,7 +35,22 @@ export default function CalendarPanel({ closeModal }) {
     }
 
     function onDateChange(e) {
-        console.log(e)
+        setCurrSelected(e)
+        if (opened && isSameDay(e, lastSelected)) {
+            setOpened(false)
+        } else {
+            setOpened(true)
+        }
+
+        setLastSelected(e)
+    }
+
+    function setupCoordinates(e) {
+        var firstElementsY = document.getElementsByClassName("mantine-calendar-day")[0].getBoundingClientRect().y
+        if (e.target.getBoundingClientRect().y >= firstElementsY) {
+            setXY(e.target.getBoundingClientRect())
+
+        }
     }
 
     // onClick & hover events for each day in the calendar
@@ -52,14 +75,24 @@ export default function CalendarPanel({ closeModal }) {
                     {date.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric'})}
                 </div>
                 <Button className="addEventBtn" onClick={() => {closeModal(true)}}>Add Event</Button>
-            
-            
             </div>
             <div className="calendarContainer w-100 d-flex align-items-center justify-content-center">
+                { opened &&
+                    <div className="popoverContainer" style={{top: XY.y + XY.height + "px", left: XY.x - 128 + XY.width/2 + "px"}}>
+                        <div className="arrow"></div>
+                        <div id="eventPopover">
+                            <div className="title">{new Date(currSelected).toDateString()}</div>
+                            <div className="body">
+                                Sample Paragraph info
+                            </div>
+                        </div>
+                    </div>}
                 <div className="calendarHolder">
                     <Calendar
                         value={date}
+                        onMouseDown={setupCoordinates}
                         onChange={onDateChange}
+                        onMonthChange={() => setOpened(false)}
                         size="lg"
                         fullWidth
                         dayClassName="eachDay"
