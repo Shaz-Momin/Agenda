@@ -62,7 +62,7 @@ export default function ForgotPassword() {
                 </Card.Body>
             </Card>
             <div className="w-100 mt-4 text-center text-white">
-                Need an account? <Link style={{ textDecoration: 'none' }}  to="/signup">Sign Up</Link>
+                Need an account? <Link  className="bg-white rounded p-1 px-2 mx-1" style={{ textDecoration: 'none', fontSize:"0.9rem"}} to="/signup">Sign Up</Link>
             </div>
         </>
     )

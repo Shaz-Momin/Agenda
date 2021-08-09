@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import DateContext from '../contexts/DateContext'
+import React from 'react'
+import { useDateContext } from '../contexts/DateContext'
 import '../styles/dashboard.css'
 
 export default function DateDocker() {
 
-    const date = useContext(DateContext)
+    const { date } = useDateContext()
+
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];

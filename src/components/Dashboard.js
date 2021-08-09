@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import DateDocker from './DateDocker'
 import CalendarPanel from './CalendarPanel'
 import EventsPanel from './EventsPanel'
-import DateContext from '../contexts/DateContext'
+import { DateProvider } from '../contexts/DateContext'
 import '../styles/dashboard.css'
 import CreateEventModal from './CreateEventModal'
 import { EventProvider } from '../contexts/EventContext'
@@ -10,26 +10,13 @@ import { useMediaPredicate } from "react-media-hook";
 
 export default function Dashboard() {
 
-    const [date, setDate] = useState(new Date())
     const [openAddModal, setOpenAddModal] = useState(false)
     const [calendarView, setCalendarView] = useState(false)
-    const smallerThan750 = useMediaPredicate("(max-width: 750px)");
-
-
-    useEffect(() => {
-        var timer = setInterval(() => {
-            setDate(new Date())
-        }, 1000)
-
-        return function cleanup() {
-            clearInterval(timer)
-        }
-    }, [])
-
+    const smallerThan750 = useMediaPredicate("(max-width: 750px)");   
 
     return (
         <> 
-            <DateContext.Provider value={date}>
+            <DateProvider>
                 <EventProvider>
                     { smallerThan750 && 
                     <div id="toggleCal" onClick={() => setCalendarView(!calendarView)}>
@@ -67,7 +54,7 @@ export default function Dashboard() {
                     </div>))}
                     {openAddModal && <CreateEventModal closeModal={setOpenAddModal}/>}
                 </EventProvider>
-            </DateContext.Provider>
+            </DateProvider>
         </>
     )
 }

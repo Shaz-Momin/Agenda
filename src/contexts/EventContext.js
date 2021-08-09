@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { useAuth } from './AuthContext'
-import { formatISO, isSameDay } from 'date-fns'
 
 const EventContext = React.createContext()
 
@@ -13,6 +12,7 @@ export function EventProvider({ children }) {
     const [pastEvents, setPastEvents] = useState([])
     const [currEvents, setCurrEvents] = useState([])
     const [upcomingEvents, setUpcomingEvents] = useState([])
+    const [futureEvents, setFutureEvents] = useState([])
 
     const { currentUser, db, localDb } = useAuth()
 
@@ -98,6 +98,8 @@ export function EventProvider({ children }) {
         setCurrEvents,
         upcomingEvents,
         setUpcomingEvents,
+        futureEvents,
+        setFutureEvents,
         saveEvent,
         updateEvent,
         deleteEvent

@@ -3,14 +3,17 @@ import { Calendar } from '@mantine/dates'
 import { Button, Dropdown } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { useHistory } from 'react-router-dom'
-import DateContext from '../contexts/DateContext'
+import { useDateContext } from '../contexts/DateContext'
 import '../styles/calendarPanel.css'
+
 
 export default function CalendarPanel({ closeModal }) {
     const [error, setError] = useState()
-    const { currentUsername, logout } = useAuth()
+    const [opened, setOpened] = useState(false)
+    const { logout } = useAuth()
     const history = useHistory()
-    const date = useContext(DateContext)
+
+    const { date } = useDateContext()
 
     async function handleLogout() {
         setError('')
@@ -23,8 +26,12 @@ export default function CalendarPanel({ closeModal }) {
         }
     }
 
+    function onDateChange(e) {
+        console.log(e)
+    }
+
     // onClick & hover events for each day in the calendar
-    var days = document.getElementsByClassName('mantine-calendar-day')
+    /* var days = document.getElementsByClassName('mantine-calendar-day')
     for (var i = 0; i < days.length; i++) {
         let element = days[i]
         element.onclick = () => {
@@ -36,7 +43,7 @@ export default function CalendarPanel({ closeModal }) {
         element.onmouseover = () => {
             element.title = element.innerHTML
         }
-    }
+    } */
 
     return (
         <>
@@ -45,12 +52,14 @@ export default function CalendarPanel({ closeModal }) {
                     {date.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric'})}
                 </div>
                 <Button className="addEventBtn" onClick={() => {closeModal(true)}}>Add Event</Button>
+            
+            
             </div>
             <div className="calendarContainer w-100 d-flex align-items-center justify-content-center">
                 <div className="calendarHolder">
                     <Calendar
                         value={date}
-                        onChange={date}
+                        onChange={onDateChange}
                         size="lg"
                         fullWidth
                         dayClassName="eachDay"
@@ -87,7 +96,8 @@ export default function CalendarPanel({ closeModal }) {
                                 wordSpacing: "2rem",
                                 textTransform: "uppercase"
                             }
-                        }}/>
+                        }}
+                    />
                 </div>
             </div>
             <div className="cta-footer">
