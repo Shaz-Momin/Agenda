@@ -52,8 +52,9 @@ export function AuthProvider({ children }) {
 
             // Save event data to localStorage if its taking place today
             // OLD QUERY: isSameDay(date, docStartDate) || isSameDay(date, docEndDate) || formatISO(date) < docStartDate || formatISO(date) < docEndDate
-            // NEW QUERY: console.log(isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)}))
-            if (isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)})) {
+            // NEW QUERY: isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)})
+            var within30DaysOffset = isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)})
+            if (within30DaysOffset) {
                 console.log('Setting events from firestore to local db')
                 localDb.collection('events').doc(doc.id).get().then(document => {
                     if (document === null) {
