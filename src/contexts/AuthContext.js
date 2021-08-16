@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import firebase from 'firebase/app'
 import localbase from 'localbase'
 import { auth } from '../firebase'
-import { formatISO, isSameDay } from 'date-fns'
+import { formatISO, isSameDay, isWithinInterval, addDays, subDays } from 'date-fns'
 
 const AuthContext = React.createContext()
 
@@ -51,7 +51,9 @@ export function AuthProvider({ children }) {
             var date = new Date()
 
             // Save event data to localStorage if its taking place today
-            if (isSameDay(date, docStartDate) || isSameDay(date, docEndDate) || formatISO(date) < docStartDate || formatISO(date) < docEndDate) {
+            // OLD QUERY: isSameDay(date, docStartDate) || isSameDay(date, docEndDate) || formatISO(date) < docStartDate || formatISO(date) < docEndDate
+            // NEW QUERY: console.log(isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)}))
+            if (isWithinInterval(new Date(docStartDate), { start: subDays(date, 30), end: addDays(date, 30)})) {
                 console.log('Setting events from firestore to local db')
                 localDb.collection('events').doc(doc.id).get().then(document => {
                     if (document === null) {

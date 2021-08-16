@@ -13,13 +13,14 @@ export default function EventsPanel() {
 
     const { date } = useDateContext()
 
-    const [openUpdateModal, setOpenUpdateModal] = useState(false)
-    const [selectedEvent, setSelectedEvent] = useState({})
+    
 
     const { pastEvents, setPastEvents,
             currEvents, setCurrEvents,
             upcomingEvents, setUpcomingEvents,
-            futureEvents, setFutureEvents } = useEventContext()
+            futureEvents, setFutureEvents,
+            openUpdateModal, setOpenUpdateModal,
+            selectedEvent, setSelectedEvent } = useEventContext()
     const { localDb } = useAuth()
 
     function hasEvent(arr, key) {
@@ -70,7 +71,7 @@ export default function EventsPanel() {
 
     
     return (
-        <>
+        <div>
             <hr class="solid line"/>
             <div>
                 <div className="sectionTitle">Currently</div>
@@ -104,6 +105,6 @@ export default function EventsPanel() {
                 </div>
             </div>
             {openUpdateModal && <UpdateEventModal closeModal={setOpenUpdateModal} selectedEvent={selectedEvent}/>}
-        </>
+        </div>
     )
 }

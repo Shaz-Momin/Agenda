@@ -15,14 +15,12 @@ export default function DateDocker() {
     
 
     return (
-        <>
-            <div className="d-flex flex-row align-items-center justify-content-center">
-                <div className="mainDate mx-2">{date.getDate()}</div>
-                <div className="text-left mx-4">
-                    <div className="mainMonth">{monthNames[date.getMonth()]}</div>
-                    <div className="mainWeek">{weekNames[date.getDay()]}</div>
-                </div>
+        <div className="d-flex flex-row align-items-center justify-content-center">
+            <div className="mainDate mx-2">{date.getDate()}</div>
+            <div className="text-left mx-4">
+                <div className="mainMonth">{monthNames[date.getMonth()]}</div>
+                <div className="mainWeek">{weekNames[date.getDay()]}</div>
             </div>
-        </>
+        </div>
     )
 }

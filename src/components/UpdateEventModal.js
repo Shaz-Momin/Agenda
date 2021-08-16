@@ -26,9 +26,8 @@ export default function UpdateEventModal({ closeModal, selectedEvent }) {
             return 0
         }
 
-        // Event Validation: startTime >= endTime or endTime > currentTime
-        if (Date.parse(startTimeRef.current.value) >= Date.parse(endTimeRef.current.value)
-            || Date.parse(endTimeRef.current.value) < new Date()) {
+        // Event Validation: startTime >= endTime
+        if (Date.parse(startTimeRef.current.value) >= Date.parse(endTimeRef.current.value)) {
             setError("Please enter a valid timeslot")
             return 0
         }

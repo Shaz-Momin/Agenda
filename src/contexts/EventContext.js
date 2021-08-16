@@ -14,6 +14,9 @@ export function EventProvider({ children }) {
     const [upcomingEvents, setUpcomingEvents] = useState([])
     const [futureEvents, setFutureEvents] = useState([])
 
+    const [openUpdateModal, setOpenUpdateModal] = useState(false)
+    const [selectedEvent, setSelectedEvent] = useState({})
+
     const { currentUser, db, localDb } = useAuth()
 
     // Save the event data in the db 
@@ -50,16 +53,13 @@ export function EventProvider({ children }) {
 
     // Updating the data in the events array (state)
     function updateEventsArr(eventObj, docId) {
-        for (var i = 0; i < currEvents.length; i++) {
-            if (currEvents[i].key == docId) {
-                currEvents[i].data = eventObj
-                return
-            }
-        }
-        for (var i = 0; i < upcomingEvents.length; i++) {
-            if (upcomingEvents[i].key == docId) {
-                upcomingEvents[i].data = eventObj
-                return
+        var stateArrays = [currEvents, upcomingEvents, futureEvents, pastEvents]
+        for (var i = 0; i < stateArrays.length; i++) {
+            for (var j = 0; j < stateArrays[i].length; j++) {
+                if (stateArrays[i][j].key == docId) {
+                    stateArrays[i][j].data = eventObj
+                    return
+                }
             }
         }
     }
@@ -70,16 +70,15 @@ export function EventProvider({ children }) {
         localDb.collection('events').doc(docId).delete()
         
         // Deleting that event from the events array state
-        if (spliceFromArr(upcomingEvents, docId)) {
-            return
+        var stateArrays = [currEvents, upcomingEvents, futureEvents, pastEvents]
+        for (var i = 0; i < stateArrays.length; i++) {
+            spliceFromArr(stateArrays[i], docId)
         }
-        spliceFromArr(currEvents, docId)
 
         function spliceFromArr(arr, docId) {
             for (var i = 0; i < arr.length; i++) {
                 if (arr[i].key == docId) {
                     arr.splice(i, 1)
-                    return true
                 }
             }
         }
@@ -92,14 +91,12 @@ export function EventProvider({ children }) {
 
 
     const value = {
-        pastEvents,
-        setPastEvents,
-        currEvents,
-        setCurrEvents,
-        upcomingEvents,
-        setUpcomingEvents,
-        futureEvents,
-        setFutureEvents,
+        pastEvents, setPastEvents,
+        currEvents, setCurrEvents,
+        upcomingEvents, setUpcomingEvents,
+        futureEvents, setFutureEvents,
+        openUpdateModal, setOpenUpdateModal,
+        selectedEvent, setSelectedEvent,
         saveEvent,
         updateEvent,
         deleteEvent

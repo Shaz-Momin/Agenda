@@ -8,7 +8,8 @@ import { isSameDay } from 'date-fns'
 
 export default function EventPopover({ XY, currSelected }) {
 
-    const { pastEvents, currEvents, upcomingEvents, futureEvents } = useEventContext()
+    const { pastEvents, currEvents, upcomingEvents, futureEvents,
+            openUpdateModal, setOpenUpdateModal, selectedEvent, setSelectedEvent  } = useEventContext()
     const { date } = useDateContext()
 
     const [events, setEvents] = useState([])
@@ -45,9 +46,15 @@ export default function EventPopover({ XY, currSelected }) {
                         return new Date(a.data.startTime) - new Date(b.data.startTime)
                     }).map((event) => {
                         return (
-                            <div className="eventItem">
-                                {event.data.eventTitle}
-                            </div>
+                            <>
+                                <div className="eventItem">
+                                    <span className="edit" title="Edit Event" onClick={() => {
+                                        setSelectedEvent(event)
+                                        setOpenUpdateModal(true)
+                                    }}>&#9998;</span>
+                                    <div className="text">{event.data.eventTitle}</div>
+                                </div>
+                            </>
                         )
                     })}
                 </div>
