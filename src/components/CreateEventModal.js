@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useEventContext } from '../contexts/EventContext'
-import { formatISO } from 'date-fns'
+import { formatISO, startOfDay, endOfDay } from 'date-fns'
 import '../styles/modal.css'
 import { Checkbox } from '@mantine/core'
 
@@ -41,8 +41,8 @@ export default function CreateEventModal({ closeModal }) {
         const eventObj = {
             eventTitle: eventTitleRef.current.value,
             eventDescription: eventDesRef.current.value,
-            startTime: !allDay ? startTimeRef.current.value : formatISO(new Date(dateRef.current.value + "T00:00")).substr(0, 16),
-            endTime: !allDay ? endTimeRef.current.value : formatISO(new Date(dateRef.current.value + "T24:00")).substr(0, 16)
+            startTime: !allDay ? startTimeRef.current.value : formatISO(startOfDay(new Date(dateRef.current.value))).substr(0, 16),
+            endTime: !allDay ? endTimeRef.current.value : formatISO(endOfDay(new Date(dateRef.current.value))).substr(0, 16)
         }
 
         // Save the data in the database & locally

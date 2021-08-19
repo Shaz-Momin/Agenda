@@ -3,24 +3,37 @@ import { EventProvider, useEventContext } from '../contexts/EventContext'
 import { useDateContext } from '../contexts/DateContext'
 import { useMediaPredicate } from 'react-media-hook'
 import '../styles/datePopover.css'
-import { isSameDay } from 'date-fns'
+import { isBefore, isSameDay, isWithinInterval } from 'date-fns'
 
 
 export default function EventPopover({ XY, currSelected }) {
 
     const { pastEvents, currEvents, upcomingEvents, futureEvents,
-            openUpdateModal, setOpenUpdateModal, selectedEvent, setSelectedEvent  } = useEventContext()
+            setOpenUpdateModal, selectedEvent, setSelectedEvent  } = useEventContext()
     const { date } = useDateContext()
 
     const [events, setEvents] = useState([])
 
     useEffect(() => {
         if (new Date(currSelected) < new Date(date.toDateString())) {
-            setEvents(pastEvents.filter((e) => isSameDay(new Date(e.data.startTime), new Date(currSelected))))
+            setEvents(pastEvents.filter((e) => getFilteredEvents(e)))
         } else if (new Date(currSelected) > new Date(date.toDateString())) {
-            setEvents(futureEvents.filter((e) => isSameDay(new Date(e.data.startTime), new Date(currSelected))))
+            setEvents(futureEvents.filter((e) => getFilteredEvents(e)))
         } else if (isSameDay(new Date(currSelected), date)) {
-            setEvents([...currEvents, ...upcomingEvents])
+            setEvents(pastEvents.filter((e) => {
+                return isSameDay(new Date(e.data.startTime), new Date(currSelected))
+            }))
+            setEvents(arr => [...arr, ...currEvents, ...upcomingEvents])
+        }
+
+        // Decides whether a particular event needs to be displayed from event-state arrays
+        function getFilteredEvents(e) {
+            var singleDay = isSameDay(new Date(e.data.startTime),new Date(e.data.endTime))
+
+            if (singleDay) {
+                return isSameDay(new Date(e.data.startTime), new Date(currSelected))
+            }
+            return isWithinInterval(new Date(currSelected), { start: new Date(e.data.startTime), end: new Date(e.data.endTime)})
         }
     }, [currSelected])
 

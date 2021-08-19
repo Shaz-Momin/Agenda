@@ -6,7 +6,7 @@ import { useDateContext } from '../contexts/DateContext'
 import UpdateEventModal from './UpdateEventModal'
 import '../styles/dashboard.css'
 import '../styles/eventsPanel.css'
-import { endOfDay } from 'date-fns'
+import { startOfDay, endOfDay, isAfter, isBefore, isSameDay } from 'date-fns'
 
 
 export default function EventsPanel() {
@@ -47,9 +47,19 @@ export default function EventsPanel() {
             for (var i = 0; i < docs.length; i++) {
                 let event = docs[i]
                 let starts = new Date(event.data.startTime)
+                let ends = new Date(event.data.endTime)
                 //setEvents(arr => [...arr, event.key])
-                // Allocating events to either current or upcoming categories        
-                var currentlyHappening = date > starts && date < new Date(event.data.endTime)
+                // Allocating events to event-state categories 
+                if (!isSameDay(starts, ends)) {
+                    if (isAfter(ends, endOfDay(date)) && !hasEvent(futureEvents, event.key)) {
+                        setFutureEvents(arr => [...arr, event])
+                    }
+                    if (isBefore(starts, startOfDay(date)) && !hasEvent(pastEvents, event.key)) {
+                        setPastEvents(arr => [...arr, event])
+                    }
+                }
+                
+                var currentlyHappening = date > starts && date < ends
                 if (currentlyHappening && !hasEvent(currEvents, event.key)) {
                     // events.splice(j, 1)
                     removeFromArr(upcomingEvents, event.key)
@@ -57,7 +67,7 @@ export default function EventsPanel() {
                 } else if (starts > date && starts < endOfDay(date) && !hasEvent(upcomingEvents, event.key)) {
                     removeFromArr(currEvents, event.key)
                     setUpcomingEvents(arr => [...arr, event])
-                } else if (starts > endOfDay(date) && !hasEvent(futureEvents, event.key) ) {
+                } else if (starts > endOfDay(date) && !hasEvent(futureEvents, event.key)) {
                     setFutureEvents(arr => [...arr, event])
                 } else if (new Date(event.data.endTime) < date && !hasEvent(pastEvents, event.key)) {
                     removeFromArr(currEvents, event.key)
