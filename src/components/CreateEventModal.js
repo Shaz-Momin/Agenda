@@ -47,7 +47,6 @@ export default function CreateEventModal({ closeModal }) {
 
         // Save the data in the database & locally
         saveEvent(eventObj)
-
         closeModal(false) // Close modal after saving the event
     }
 
